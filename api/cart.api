@@ -1,0 +1,69 @@
+
+syntax = "v1"
+
+//车辆注册接口
+type (
+	CartRegisterReq {
+		CartName string `form:"cartName"`
+	}
+
+	CartRegisterResp {
+		CartId int `json:"cartId"`
+		Resp
+	}
+)
+
+//车辆信息更新接口
+type (
+	CartUpdateReq {
+		CartId int `form:"cartId"`
+		State string `form:"state"`
+	}
+
+	CartUpdateResp {
+		Resp
+	}
+)
+
+//车辆异常状态报警接口
+type (
+	AlarmReq {
+		CartId int `form:"cartId"`
+		Msg string `form:"msg"`
+	}
+
+	AlarmResp {
+		Resp
+	}
+)
+
+//获取车辆信息列表接口
+type (
+	CartInfo {
+		CartId int `json:"cartId"`
+		CartName string `json:"cartName"`
+		State string `json:"state"`
+	}
+
+	GetInfoResp {
+		CartInfoList []CartInfo `json:"cartList"`
+		Resp
+	}
+)
+
+@server (
+	group: cart
+)
+service rubbish-cart-api {
+	@handler CartRegister
+	post /cart/register(CartRegisterReq) returns(CartRegisterResp)
+
+	@handler CartUpdate
+	post /cart/update(CartUpdateReq) returns(CartUpdateResp)
+
+	@handler Alarm
+	post /cart/alarm(AlarmReq) returns(AlarmResp)
+
+	@handler GetInfo
+	get /cart/get-info returns(GetInfoResp)
+}

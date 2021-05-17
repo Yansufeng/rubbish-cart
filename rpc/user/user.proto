@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package user;
+
+message Empty {}
+
+message GetOpenIdReq {
+  string Code = 1;
+}
+
+message GetOpenIdResp {
+  string OpenId = 1;
+}
+
+message GetPurviewReq {
+  string Openid = 1;
+}
+
+message GetPurviewResp {
+  int64 Purview = 1;
+}
+
+message GetRegisterReq {
+  string Openid = 1;
+  string Name = 2;
+}
+
+message GetRegisterResp {
+  int64 Purview = 1;
+}
+
+message UserInfo {
+  string OpenId = 1;
+  string Name = 2;
+  int64 Purview = 3;
+}
+
+message GetUserListResp {
+  repeated UserInfo UserinfoList = 1;
+}
+
+message UpdateUserInfoReq {
+  string OpenId = 1;
+  string Name = 2;
+  int64 Purview = 3;
+}
+
+message UpdateUserInfoResp {
+  bool Ok = 1;
+}
+
+service User {
+  rpc GetOpenId(GetOpenIdReq) returns(GetOpenIdResp);
+  rpc GetPurview(GetPurviewReq) returns(GetPurviewResp);
+  rpc GetRegister(GetRegisterReq) returns(GetRegisterResp);
+  rpc GetUserList(Empty) returns(GetUserListResp);
+  rpc UpdateUserInfo(UpdateUserInfoReq) returns(UpdateUserInfoResp);
+}

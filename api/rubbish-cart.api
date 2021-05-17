@@ -1,0 +1,16 @@
+syntax = "v1"
+
+info(
+	title: "rubbish-cart"
+	desc: "清洁助力车管理平台"
+	author: "Yansufeng"
+	email: "392576297@qq.com"
+)
+
+import (
+	"cart.api"
+	"user.api"
+	"rubbish.api"
+	"utils.api"
+	"ws.api"
+)

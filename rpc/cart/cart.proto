@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package cart;
+
+message Empty {}
+
+message CartRegisterReq {
+  string CartName = 1;
+}
+
+message CartRegisterResp {
+  int64 CartId = 1;
+  bool Ok = 2;
+}
+
+message CartUpdateReq {
+  int64 CartId = 1;
+  string State = 2;
+}
+
+message CartUpdateResp {
+  bool Ok = 1;
+}
+
+message AlarmReq {
+  int64 CartId = 1;
+  string Msg = 2;
+}
+
+message AlarmResp {
+  bool Ok = 1;
+}
+
+message CartInfo {
+  int64 CartId = 1;
+  string CartName = 2;
+  string State = 4;
+}
+
+message GetInfoResp {
+  repeated CartInfo CartList = 1;
+}
+
+service Cart {
+  rpc CartRegister(CartRegisterReq) returns(CartRegisterResp);
+  rpc CartUpdate(CartUpdateReq) returns(CartUpdateResp);
+  rpc Alarm(AlarmReq) returns(AlarmResp);
+  rpc GetInfo(Empty) returns(GetInfoResp);
+}

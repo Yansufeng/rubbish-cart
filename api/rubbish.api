@@ -1,0 +1,65 @@
+
+syntax = "v1"
+
+//获取垃圾列表接口
+type (
+	RubbishInfoResp {
+		CartId int `json:"cartId"`
+		TypeId int `json:"typeId"`
+		Name string `json:"name"`
+		Num int `json:"num"`
+	}
+
+	GetCartRubbishListReq {
+		CartId int `form:"cartId"`
+	}
+
+	GetCartRubbishListResp {
+		RubbishList []RubbishInfoResp `json:"rubbishList"`
+		Resp
+	}
+)
+
+//增加垃圾种类接口
+type (
+	AddRubbishTypeReq {
+		Name string `form:"name"`
+	}
+
+	AddRubbishTypeResp {
+		Id int `json:"id"`
+		Resp
+	}
+)
+
+type (
+	RubbishInfoReq {
+		CartId int `form:"cartId"`
+		TypeId int `form:"typeId"`
+		Name string `form:"name"`
+		Num int `form:"num"`
+	}
+
+	UpdateCartRubbishReq {
+		CartId int `form:"cartId"`
+		RubbishList []RubbishInfoReq `form:"rubbishList"`
+	}
+
+	UpdateCartRubbishResp {
+		Resp
+	}
+)
+
+@server (
+	group: rubbish
+)
+service rubbish-cart-api {
+	@handler GetCartRubbishList
+	get /rubbish/get-rubbish(GetCartRubbishListReq) returns(GetCartRubbishListResp)
+
+	@handler AddRubbishType
+	post /rubbish/add-type(AddRubbishTypeReq) returns(AddRubbishTypeResp)
+
+	@handler UpdateCartRubbish
+	post /rubbish/update-rubbish(UpdateCartRubbishReq) returns(UpdateCartRubbishResp)
+}

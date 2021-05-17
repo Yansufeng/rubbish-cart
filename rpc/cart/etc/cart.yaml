@@ -1,0 +1,10 @@
+Name: cart.rpc
+ListenOn: 127.0.0.1:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: cart.rpc
+DataSource: root:123456@tcp(localhost:3306)/rubbish-cart
+Table: cart
+Cache:
+  - Host: localhost:6379

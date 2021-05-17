@@ -1,0 +1,86 @@
+
+syntax = "v1"
+
+//获取OpenId接口
+type (
+	GetOpenIdReq {
+		Code string `form:"code"`
+	}
+
+	GetOpenIdResp {
+		OpenId string `json:"openId"`
+		Resp
+	}
+)
+
+//获取用户权限接口
+type (
+	GetPurviewReq {
+		OpenId string `form:"openId"`
+	}
+
+	GetPurviewResp {
+		Purview int `json:"purview"`
+		Resp
+	}
+)
+
+//获取用户权限、注册接口
+type (
+	GetRegisterReq {
+		OpenId string `form:"openId"`
+		Name string  `form:"name"`
+	}
+
+	GetRegisterResp {
+		Purview int `json:"purview"`
+		Resp
+	}
+)
+
+//获取用户信息列表接口
+type (
+	UserInfo {
+		OpenId string `json:"openId"`
+		Name string `json:"name"`
+		Purview int `json:"purview"`
+	}
+
+	GetUserListResp {
+		UserList []UserInfo `json:"userList"`
+		Resp
+	}
+)
+
+//修改用户信息接口
+type (
+	UpdateUserInfoReq {
+		OpenId string `form:"openId"`
+		Name string `form:"name"`
+		Purview int `form:"purview"`
+	}
+
+	UpdateUserInfoResp {
+		Resp
+	}
+)
+
+@server (
+	group: user
+)
+service rubbish-cart-api {
+	@handler GetOpenId
+	get /user/get-openid(GetOpenIdReq) returns(GetOpenIdResp)
+
+	@handler GetPurview
+	get /user/get-purview(GetPurviewReq) returns(GetPurviewResp)
+
+	@handler GetRegister
+	get /user/register(GetRegisterReq) returns(GetRegisterResp)
+
+	@handler GetUserList
+	get /user/get-userlist returns(GetUserListResp)
+
+	@handler UpdateUserInfo
+	post /user/update(UpdateUserInfoReq) returns(UpdateUserInfoResp)
+}

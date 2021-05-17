@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package rubbish;
+
+message RubbishInfo {
+  int64 CartId = 1;
+  int64 TypeId = 2;
+  string Name = 3;
+  int64 Num = 4;
+}
+
+message GetCartRubbishListReq {
+  int64 CartId = 1;
+}
+
+message GetCartRubbishListResp {
+  repeated RubbishInfo RubbishList = 1;
+}
+
+message AddRubbishTypeReq {
+  string Name = 1;
+}
+
+message AddRubbishTypeResp {
+  int64 id = 1;
+}
+
+message UpdateCartRubbishReq {
+  int64 CartId = 1;
+  RubbishInfo RubbishInfo = 2;
+}
+
+message UpdateCartRubbishResp {
+  bool Ok = 1;
+}
+
+service Rubbish {
+  rpc GetCartRubbishList(GetCartRubbishListReq) returns(GetCartRubbishListResp);
+  rpc AddRubbishType(AddRubbishTypeReq) returns(AddRubbishTypeResp);
+  rpc UpdateCartRubbish(UpdateCartRubbishReq) returns(UpdateCartRubbishResp);
+}

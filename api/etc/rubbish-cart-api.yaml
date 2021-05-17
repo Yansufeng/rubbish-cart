@@ -1,0 +1,19 @@
+Name: rubbish-cart-api
+Host: 0.0.0.0
+Port: 8888
+CartRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: cart.rpc
+RubbishRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: rubbish.rpc
+UserRpc:
+  Etcd:
+    Hosts:
+      - localhost:2379
+    Key: user.rpc
+
