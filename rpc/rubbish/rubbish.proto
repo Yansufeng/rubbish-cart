@@ -2,11 +2,19 @@ syntax = "proto3";
 
 package rubbish;
 
+message Empty {}
+
 message RubbishInfo {
   int64 CartId = 1;
   int64 TypeId = 2;
   string Name = 3;
   int64 Num = 4;
+}
+
+message RubbishType {
+  int64 TypeId = 1;
+  string Name = 2;
+  int64 IconId = 3;
 }
 
 message GetCartRubbishListReq {
@@ -34,8 +42,13 @@ message UpdateCartRubbishResp {
   bool Ok = 1;
 }
 
+message GetTypeAllResp {
+  repeated RubbishType TypeList = 1;
+}
+
 service Rubbish {
   rpc GetCartRubbishList(GetCartRubbishListReq) returns(GetCartRubbishListResp);
   rpc AddRubbishType(AddRubbishTypeReq) returns(AddRubbishTypeResp);
   rpc UpdateCartRubbish(UpdateCartRubbishReq) returns(UpdateCartRubbishResp);
+  rpc GetTypeAll(Empty) returns(GetTypeAllResp);
 }

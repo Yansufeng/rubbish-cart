@@ -35,3 +35,8 @@ func (s *RubbishServer) UpdateCartRubbish(ctx context.Context, in *rubbish.Updat
 	l := logic.NewUpdateCartRubbishLogic(ctx, s.svcCtx)
 	return l.UpdateCartRubbish(in)
 }
+
+func (s *RubbishServer) GetTypeAll(ctx context.Context, in *rubbish.Empty) (*rubbish.GetTypeAllResp, error) {
+	l := logic.NewGetTypeAllLogic(ctx, s.svcCtx)
+	return l.GetTypeAll(in)
+}

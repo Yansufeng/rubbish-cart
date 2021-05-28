@@ -25,9 +25,10 @@ type (
 	RubbishtypeModel interface {
 		Insert(data Rubbishtype) (sql.Result, error)
 		FindOne(rubbishType int64) (*Rubbishtype, error)
-		GetAll() (map[int64]string, error)
 		Update(data Rubbishtype) error
 		Delete(rubbishType int64) error
+		GetAll() (map[int64]string, error)
+		GetAllToList() ([]Rubbishtype, error)
 	}
 
 	defaultRubbishtypeModel struct {
@@ -38,6 +39,7 @@ type (
 	Rubbishtype struct {
 		RubbishType int64  `db:"rubbishType"`
 		RubbishName string `db:"rubbishName"`
+		IconId      int64  `db:"iconId"`
 	}
 )
 
@@ -49,8 +51,8 @@ func NewRubbishtypeModel(conn sqlx.SqlConn, c cache.CacheConf) RubbishtypeModel 
 }
 
 func (m *defaultRubbishtypeModel) Insert(data Rubbishtype) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, rubbishtypeRowsExpectAutoSet)
-	ret, err := m.ExecNoCache(query, data.RubbishType, data.RubbishName)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, rubbishtypeRowsExpectAutoSet)
+	ret, err := m.ExecNoCache(query, data.RubbishType, data.RubbishName, data.IconId)
 
 	return ret, err
 }
@@ -72,6 +74,25 @@ func (m *defaultRubbishtypeModel) FindOne(rubbishType int64) (*Rubbishtype, erro
 	}
 }
 
+func (m *defaultRubbishtypeModel) Update(data Rubbishtype) error {
+	rubbishtypeRubbishTypeKey := fmt.Sprintf("%s%v", cacheRubbishtypeRubbishTypePrefix, data.RubbishType)
+	_, err := m.Exec(func(conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `rubbishType` = ?", m.table, rubbishtypeRowsWithPlaceHolder)
+		return conn.Exec(query, data.RubbishName, data.IconId, data.RubbishType)
+	}, rubbishtypeRubbishTypeKey)
+	return err
+}
+
+func (m *defaultRubbishtypeModel) Delete(rubbishType int64) error {
+
+	rubbishtypeRubbishTypeKey := fmt.Sprintf("%s%v", cacheRubbishtypeRubbishTypePrefix, rubbishType)
+	_, err := m.Exec(func(conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("delete from %s where `rubbishType` = ?", m.table)
+		return conn.Exec(query, rubbishType)
+	}, rubbishtypeRubbishTypeKey)
+	return err
+}
+
 func (m *defaultRubbishtypeModel) GetAll() (map[int64]string, error) {
 	var res []Rubbishtype
 	query := fmt.Sprintf("select %s from %s", rubbishtypeRows, m.table)
@@ -89,23 +110,16 @@ func (m *defaultRubbishtypeModel) GetAll() (map[int64]string, error) {
 	return mapRes, nil
 }
 
-func (m *defaultRubbishtypeModel) Update(data Rubbishtype) error {
-	rubbishtypeRubbishTypeKey := fmt.Sprintf("%s%v", cacheRubbishtypeRubbishTypePrefix, data.RubbishType)
-	_, err := m.Exec(func(conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `rubbishType` = ?", m.table, rubbishtypeRowsWithPlaceHolder)
-		return conn.Exec(query, data.RubbishName, data.RubbishType)
-	}, rubbishtypeRubbishTypeKey)
-	return err
-}
+func (m *defaultRubbishtypeModel) GetAllToList() ([]Rubbishtype, error) {
+	var res []Rubbishtype
+	query := fmt.Sprintf("select %s from %s", rubbishtypeRows, m.table)
 
-func (m *defaultRubbishtypeModel) Delete(rubbishType int64) error {
+	err := m.QueryRowsNoCache(&res, query)
+	if err != nil {
+		return nil, err
+	}
 
-	rubbishtypeRubbishTypeKey := fmt.Sprintf("%s%v", cacheRubbishtypeRubbishTypePrefix, rubbishType)
-	_, err := m.Exec(func(conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("delete from %s where `rubbishType` = ?", m.table)
-		return conn.Exec(query, rubbishType)
-	}, rubbishtypeRubbishTypeKey)
-	return err
+	return res, nil
 }
 
 func (m *defaultRubbishtypeModel) formatPrimary(primary interface{}) string {

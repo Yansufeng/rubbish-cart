@@ -14,18 +14,22 @@ import (
 )
 
 type (
-	AddRubbishTypeResp     = rubbish.AddRubbishTypeResp
 	UpdateCartRubbishReq   = rubbish.UpdateCartRubbishReq
-	UpdateCartRubbishResp  = rubbish.UpdateCartRubbishResp
+	GetTypeAllResp         = rubbish.GetTypeAllResp
 	RubbishInfo            = rubbish.RubbishInfo
 	GetCartRubbishListReq  = rubbish.GetCartRubbishListReq
-	GetCartRubbishListResp = rubbish.GetCartRubbishListResp
 	AddRubbishTypeReq      = rubbish.AddRubbishTypeReq
+	AddRubbishTypeResp     = rubbish.AddRubbishTypeResp
+	UpdateCartRubbishResp  = rubbish.UpdateCartRubbishResp
+	Empty                  = rubbish.Empty
+	RubbishType            = rubbish.RubbishType
+	GetCartRubbishListResp = rubbish.GetCartRubbishListResp
 
 	Rubbish interface {
 		GetCartRubbishList(ctx context.Context, in *GetCartRubbishListReq) (*GetCartRubbishListResp, error)
 		AddRubbishType(ctx context.Context, in *AddRubbishTypeReq) (*AddRubbishTypeResp, error)
 		UpdateCartRubbish(ctx context.Context, in *UpdateCartRubbishReq) (*UpdateCartRubbishResp, error)
+		GetTypeAll(ctx context.Context, in *Empty) (*GetTypeAllResp, error)
 	}
 
 	defaultRubbish struct {
@@ -52,4 +56,9 @@ func (m *defaultRubbish) AddRubbishType(ctx context.Context, in *AddRubbishTypeR
 func (m *defaultRubbish) UpdateCartRubbish(ctx context.Context, in *UpdateCartRubbishReq) (*UpdateCartRubbishResp, error) {
 	client := rubbish.NewRubbishClient(m.cli.Conn())
 	return client.UpdateCartRubbish(ctx, in)
+}
+
+func (m *defaultRubbish) GetTypeAll(ctx context.Context, in *Empty) (*GetTypeAllResp, error) {
+	client := rubbish.NewRubbishClient(m.cli.Conn())
+	return client.GetTypeAll(ctx, in)
 }

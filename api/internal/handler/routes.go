@@ -86,6 +86,11 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/rubbish/update-rubbish",
 				Handler: rubbish.UpdateCartRubbishHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/rubbish/type/get-all",
+				Handler: rubbish.GetAllTypeHandler(serverCtx),
+			},
 		},
 	)
 

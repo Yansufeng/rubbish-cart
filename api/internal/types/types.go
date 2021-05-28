@@ -129,6 +129,17 @@ type UpdateCartRubbishResp struct {
 	Resp
 }
 
+type RubbishType struct {
+	TypeId int    `json:"typeId"`
+	Name   string `json:"name"`
+	IconId int    `json:"iconId"`
+}
+
+type GetAllResp struct {
+	TypeList []RubbishType `json:"typeList"`
+	Resp
+}
+
 type Resp struct {
 	State int    `json:"state"`
 	Msg   string `json:"msg"`
