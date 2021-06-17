@@ -27,6 +27,7 @@ func NewAddRubbishTypeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ad
 func (l *AddRubbishTypeLogic) AddRubbishType(in *rubbish.AddRubbishTypeReq) (*rubbish.AddRubbishTypeResp, error) {
 	res, err := l.svcCtx.TypeModel.Insert(model.Rubbishtype{
 		RubbishName: in.Name,
+		IconId:      4,
 	})
 	if err != nil {
 		return nil, err
